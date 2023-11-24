@@ -72,6 +72,31 @@ cv::Mat translation(cv::Mat* source, int tX, int tY) {
 	return output;
 }
 
+cv::Mat warping(cv::Mat* source, int amplitude, int frequency) {
+	cv::Mat output(source->rows, source->cols, CV_8UC3);
+
+	for (int j = 0; j < output.rows; j++) {
+		for (int i = 0; i < output.cols; i++) {
+			int u, v;
+			if (frequency == 0 || amplitude == 0 || (sin((2 * 3.1416 * j) / frequency))) {
+				output.at<cv::Vec3b>(j, i) = 0;
+			}
+
+			u = j + amplitude * sin((2 * 3.1416 * j) / frequency);
+			v = i;
+			if (u >= 0 && u <= output.rows && v >= 0 && v <= output.cols)
+			{
+				output.at<cv::Vec3b>(j, i) = source->at<cv::Vec3b>(u, v);
+			}
+			else {
+				output.at<cv::Vec3b>(j, i) = 0;
+			}
+		}
+	}
+
+return output;
+}
+
 cv::Mat rotation(cv::Mat* source, double r) {
 	cv::Mat output(source->rows, source->cols, CV_8UC3);
 	double theta = r * std::numbers::pi * 1 / 180;
