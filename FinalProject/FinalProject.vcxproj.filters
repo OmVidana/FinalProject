@@ -21,9 +21,15 @@
     <ClCompile Include="Transformations.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Trackbars.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Transformations.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Trackbars.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

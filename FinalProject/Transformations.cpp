@@ -1,5 +1,4 @@
 #include "Transformations.h"
-
 // Linear Transformations
 
 cv::Vec3b bilinearInterpolation(cv::Mat* source, double x, double y) {
@@ -18,58 +17,6 @@ cv::Vec3b bilinearInterpolation(cv::Mat* source, double x, double y) {
 	cv::Vec3b P = ((R2 - R1) / (y2 - y1)) * (y - y1) + R1;
 
 	return P;
-}
-
-cv::Mat scale(cv::Mat* source, double sX, double sY, bool bilinearMethod) {
-	cv::Mat output(static_cast<int>(source->rows * sY), static_cast<int>(source->cols * sX), CV_8UC3);
-
-	if (bilinearMethod) {
-		for (int j = 0; j < output.rows; j++)
-		{
-			double y = j / sY;
-
-			for (int i = 0; i < output.cols; i++)
-			{
-				double x = i / sX;
-				output.at<cv::Vec3b>(j, i) = bilinearInterpolation(source, x, y);
-			}
-		}
-
-		return output;
-	}
-
-	for (int y = 0; y < output.rows; y++)
-	{
-		int v = static_cast<int>(y / sY);
-
-		for (int x = 0; x < output.cols; x++)
-		{
-			int u = static_cast<int>(x / sX);
-			output.at<cv::Vec3b>(y, x) = source->at<cv::Vec3b>(v, u);
-		}
-	}
-
-	return output;
-}
-
-cv::Mat translation(cv::Mat* source, int tX, int tY) {
-	cv::Mat output(source->rows, source->cols, CV_8UC3);
-
-	for (int y = 0; y < output.rows; y++)
-	{
-		int v = y - tY;
-
-		for (int x = 0; x < output.cols; x++)
-		{
-			int u = x - tX;
-			if (v >= 0 && v < source->rows && u >= 0 && u < source->cols)
-				output.at<cv::Vec3b>(y, x) = source->at<cv::Vec3b>(v, u);
-			else
-				output.at<cv::Vec3b>(y, x) = cv::Vec3b(0, 0, 0);
-		}
-	}
-
-	return output;
 }
 
 cv::Mat warping(cv::Mat* source, int amplitude, int frequency) {
@@ -97,69 +44,7 @@ cv::Mat warping(cv::Mat* source, int amplitude, int frequency) {
 return output;
 }
 
-cv::Mat rotation(cv::Mat* source, double r) {
-	cv::Mat output(source->rows, source->cols, CV_8UC3);
-	double theta = r * std::numbers::pi * 1 / 180;
-
-	for (int y = 0; y < output.rows; y++)
-	{
-		double y0 = output.rows / 2.0 - y;
-
-		for (int x = 0; x < output.cols; x++)
-		{
-			double x0 = x - output.cols / 2.0;
-
-			double v0 = -x0 * sin(theta) + y0 * cos(theta);
-			double u0 = x0 * cos(theta) + y0 * sin(theta);
-
-			double v = output.rows / 2.0 - v0;
-			double u = u0 + output.cols / 2.0;
-
-			if (v >= 0 && v < source->rows && u >= 0 && u < source->cols)
-			{
-				cv::Vec3b p = bilinearInterpolation(source, u, v);
-				output.at<cv::Vec3b>(y, x) = p;
-			}
-			else
-				output.at<cv::Vec3b>(y, x) = cv::Vec3b(0, 0, 0);
-		}
-	}
-
-	return output;
-}
-
-cv::Mat bias(cv::Mat* source, double bX, double bY)
-{
-	cv::Mat output(source->rows, source->cols, CV_8UC3);
-
-	for (int y = 0; y < output.rows; y++)
-	{
-		double y0 = output.rows / 2.0 - y;
-
-		for (int x = 0; x < output.cols; x++)
-		{
-			double x0 = x - output.cols / 2.0;
-
-			double v0 = y0 - bY * x0;
-			double u0 = x0 - bX * y0;
-
-			double v = output.rows / 2.0 - v0;
-			double u = u0 + output.cols / 2.0;
-
-			if (v >= 0 && v < source->rows && u >= 0 && u < source->cols)
-			{
-				cv::Vec3b p = bilinearInterpolation(source, u, v);
-				output.at<cv::Vec3b>(y, x) = p;
-			}
-			else
-				output.at<cv::Vec3b>(y, x) = cv::Vec3b(0, 0, 0);
-		}
-	}
-
-	return output;
-}
-
-cv::Mat allTransformations(cv::Mat* source, double sX, double sY, int tX, int tY, double r, double bX, double bY)
+cv::Mat allTransformations(cv::Mat* source, double sX, double sY, int bX, int bY, double tX, double tY, double r, int amplitude, int frequency)
 {
 	cv::Mat output(static_cast<int>(source->rows * sY), static_cast<int>(source->cols * sX), CV_8UC3);
 	cv::Mat mS = (cv::Mat_<double>(3, 3) <<
@@ -199,8 +84,6 @@ cv::Mat allTransformations(cv::Mat* source, double sX, double sY, int tX, int tY
 				output.at<cv::Vec3b>(y, x) = cv::Vec3b(0, 0, 0);
 		}
 	}
-
-	return output;
+	
+	return warping(&output, amplitude, frequency);
 }
-
-// NonLinearTransformations

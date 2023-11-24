@@ -4,16 +4,14 @@
 
 int main() {
 
-	std::string winName = "Test";
+	std::string winName = "Final Project";	
 	cv::Mat source = cv::imread("test.jpg", cv::IMREAD_COLOR);
 
-	cv::Mat output = allTransformations(&source, 1, 1, 0, 0 , 90, 0, 0.5);
-
-	cv::imshow(winName, source);
-	cv::waitKey(0);
-
+	make_trackbar_windows();
+	while(true){
+	cv::Mat output = allTransformations(&source, sX, sY, bX, bY, tX, tY, r, wrp1, wrp2);
 	cv::imshow(winName, output);
-	cv::waitKey(0);
-
+	cv::waitKey(50);
+	}
 	return 0;
 }
