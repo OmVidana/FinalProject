@@ -2,15 +2,19 @@
 
 static void on_trackbar(int, void*)
 {
-	sX =(double) vars[0];
-	sY = (double)vars[1];
-	bX = (double)vars[2];
-	bY = (double)vars[3];
+	sX = vars[0]==0?0.1:((double)vars[0]) / 20.0;
+	sY = vars[1] == 0 ? 0.1 : ((double)vars[1]) / 20.0;
+	bX = (double)vars[2]/100.0;
+	bY = (double)vars[3] / 100.0;
 	tX = (double)vars[4];
 	tY = (double)vars[5];
 	r = (double)vars[6];
 	wrp1 = (double)vars[7];
 	wrp2 = (double)vars[8];
+		/*
+	for (int i = 0; i < 9; i++)
+		std:: cout << vars[i] << " ";*/
+	std::cout <<"SX"<<sX <<" SY "<<sY << std::endl;
 }
 
 void make_trackbar_windows(void)

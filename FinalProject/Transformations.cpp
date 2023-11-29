@@ -44,7 +44,7 @@ cv::Mat warping(cv::Mat* source, int amplitude, int frequency) {
 return output;
 }
 
-cv::Mat allTransformations(cv::Mat* source, double sX, double sY, int bX, int bY, double tX, double tY, double r, int amplitude, int frequency)
+cv::Mat allTransformations(cv::Mat* source, int amplitude, int frequency)
 {
 	cv::Mat output(static_cast<int>(source->rows * sY), static_cast<int>(source->cols * sX), CV_8UC3);
 	cv::Mat mS = (cv::Mat_<double>(3, 3) <<
@@ -66,7 +66,7 @@ cv::Mat allTransformations(cv::Mat* source, double sX, double sY, int bX, int bY
 		0, 0, 1);
 
 	cv::Mat transformations = mS * mR * mT * mB;
-
+	cv::invert(transformations,transformations);
 	for (int y = 0; y < output.rows; y++)
 	{
 		for (int x = 0; x < output.cols; x++)

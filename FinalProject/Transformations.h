@@ -6,4 +6,4 @@
 
 cv::Vec3b bilinearInterpolation(cv::Mat* source, double x, double y);
 cv::Mat warping(cv::Mat* source, int amplitude, int frequency);
-cv::Mat allTransformations(cv::Mat* source, double sX, double sY, int bX, int bY, double tX, double tY, double r, int amplitude, int frequency);
+cv::Mat allTransformations(cv::Mat* source, int amplitude, int frequency);

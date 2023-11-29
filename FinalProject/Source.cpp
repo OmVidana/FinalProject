@@ -7,11 +7,28 @@ int main() {
 	std::string winName = "Final Project";	
 	cv::Mat source = cv::imread("test.jpg", cv::IMREAD_COLOR);
 
-	make_trackbar_windows();
-	while(true){
-	cv::Mat output = allTransformations(&source, sX, sY, bX, bY, tX, tY, r, wrp1, wrp2);
-	cv::imshow(winName, output);
-	cv::waitKey(50);
+	cv::VideoCapture capture; //Open Default Camera in this Object
+	capture.open(1);
+	if (!capture.isOpened())
+	{
+		//std::cerr << "Camera is not conected to th Object, check the Value or Active Cameras." << std::endl;
+		std::cout << "Camera is not conected to th Object, check the Value or Active Cameras." << std::endl;
+		return -1;
 	}
+	cv::namedWindow(winName,cv::WINDOW_NORMAL);
+	make_trackbar_windows();
+
+	while (true)
+	{
+		cv::Mat frames;
+
+		capture >> frames; //Obtain next frame from camera.
+		cv::Mat output = allTransformations(&frames, wrp1, wrp2);
+
+		cv::imshow(winName, output);
+		//std::cout << frames.cols << frames.rows << std::endl;
+		cv::waitKey(10);
+	}
+
 	return 0;
 }
