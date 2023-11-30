@@ -18,7 +18,6 @@ int main() {
 	cv::namedWindow(winName);
 	cv::namedWindow("original");
 	make_trackbar_windows();
-
 	while (true)
 	{
 		cv::Mat frames;

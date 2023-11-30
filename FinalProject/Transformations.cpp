@@ -41,7 +41,7 @@ cv::Mat warping(cv::Mat* source, int amplitude, int frequency) {
 		}
 	}
 
-return output;
+	return output;
 }
 
 cv::Mat allTransformations(cv::Mat* source, int amplitude, int frequency)
@@ -51,7 +51,7 @@ cv::Mat allTransformations(cv::Mat* source, int amplitude, int frequency)
 		sX, 0, 0,
 		0, sY, 0,
 		0, 0, 1);
-	std::cout << sX <<" " << sY << std::endl;
+	// std::cout << sX <<" " << sY << std::endl;
 	double theta = r * std::numbers::pi * 1 / 180;
 	cv::Mat mR = (cv::Mat_<double>(3, 3) <<
 		cos(theta), sin(theta), (1 - cos(theta)) * (output.cols * 0.5) - sin(theta) * (output.rows * 0.5),
