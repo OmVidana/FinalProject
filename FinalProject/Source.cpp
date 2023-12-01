@@ -28,7 +28,8 @@ int main() {
 		cv::imshow(winName, output);
 		cv::imshow("original", frames);
 		//std::cout << frames.cols << frames.rows << std::endl;
-		cv::waitKey(50);
+		if (cv::waitKey(3) >= 0)
+			break;;
 	}
 
 	return 0;

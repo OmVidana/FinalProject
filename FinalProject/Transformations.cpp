@@ -48,8 +48,8 @@ cv::Mat allTransformations(cv::Mat* source, int amplitude, int frequency)
 {
 	cv::Mat output(static_cast<int>(source->rows * sY), static_cast<int>(source->cols * sX), CV_8UC3);
 	cv::Mat mS = (cv::Mat_<double>(3, 3) <<
-		sX, 0, 0,
-		0, sY, 0,
+		1/sX, 0, 0,
+		0, 1/sY, 0,
 		0, 0, 1);
 	// std::cout << sX <<" " << sY << std::endl;
 	double theta = r * std::numbers::pi * 1 / 180;
@@ -67,7 +67,6 @@ cv::Mat allTransformations(cv::Mat* source, int amplitude, int frequency)
 		0, 0, 1);
 
 	cv::Mat transformations = mS * mR * mT * mB;
-	cv::invert(transformations,transformations);
 	for (int y = 0; y < output.rows; y++)
 	{
 		for (int x = 0; x < output.cols; x++)
